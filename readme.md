@@ -29,6 +29,14 @@ local result = fun(videos):filter(fun.gt(2, 'rating')):concat_map(function(video
     return {id = video.id, title = video.title, boxart = boxart.id}
   end)
 end)
+
+--[[ result:
+{
+  {id = 5, title = "Die Hard", boxart = 202},
+  {id = 233, title = "Up", boxart = 32},
+  {id = 105, title = "Bad Boys", boxart = 30}
+}
+]]--
 ```
 
 ## About
