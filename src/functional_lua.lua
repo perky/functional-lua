@@ -14,15 +14,17 @@ setmetatable(fun, {
 	__call = fun.attach_to
 })
 
-function fun.curryleft( fn, fixedval )
+function fun.curryleft( fn, ... )
+	local fixed_args = {...}
 	return function( ... )
-		return fn(fixedval, unpack({...}))
+		return fn(unpack(fixed_args), unpack({...}))
 	end
 end
 
-function fun.curry( fn, fixedval )
+function fun.curry( fn, ... )
+	local fixed_args = {...}
 	return function( ... )
-		return fn(unpack({...}), fixedval)
+		return fn(unpack({...}), unpack(fixed_args))
 	end
 end
 

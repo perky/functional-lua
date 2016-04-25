@@ -66,3 +66,59 @@ fun
   :filter(fun.gt(6)) -- gt = greater than
 -- returns: {8,10}
 ```
+
+## Main functions
+The three main functions are `map`, `filter` and `reduce`. A lot can be achieved with just these three. Say you have an table of points and you want to shift them all to the right:
+
+```lua
+shifted_points = fun(points):map(function(p)
+  return {x = p.x + 5, y = p.y}
+end)
+```
+
+Filter lets you select specific fields according to some predicate, in this case we shift only the points where x > 0.
+
+```lua
+shifted_points = fun(points)
+  :filter(function(p) return p.x > 0 end)
+  :map(function(p)
+    return {x = p.x + 5, y = p.y}
+  end)
+```
+We can shorten that a bit by using the built in operator functions
+
+```lua
+filter(fun.gt(0, 'x'))
+```
+
+There's also `gte`, `lt`, `lte`, `eq`, `neq`, `and_fn`, `and_v`, `or_fn`, `or_v`, `not_fn`, `not_v` and `istype`. The `_fn` operators take two functions, one for either side, and is meant to operator with the other value operators.
+
+If we wanted to get the average of all points we use the `reduce` method:
+
+```lua
+average_point = fun(points):reduce(function(average, p, i)
+  average.x = average.x + p.x
+  average.y = average.y + p.y
+  if i == #points then
+    average.x = average.x / #points
+    average.y = average.y / #points
+  end
+  return average
+end, {x = 0, y = 0})
+```
+
+We can use some use helper functions to make life easier such as `curry`:
+
+```lua
+function offset_point( p, x_offset, y_offset )
+  return {x = p.x + x_offset, y = p.y + y_offset}
+end
+offset_x_5 = fun.curry(offset_point, 5, 0)
+shifted_points = fun(point):map(offset_x_5)
+```
+
+The examples above do not modify the original `points` table, they return a new table with the modified points. If you wanted to modify them in place you would use the `for_each` method:
+
+```lua
+fun(points):for_each(function(p) p.x = p.x + 5 end)
+```

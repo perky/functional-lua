@@ -30,6 +30,18 @@ function test.curryleft()
   assert_equal(result, 50)
 end
 
+function test.curry_multiple_args()
+  local function offset_point( p, x_offset, y_offset )
+    return {x = p.x + x_offset, y = p.y + y_offset}
+  end
+  local offset_x_5 = fun.curry(offset_point, 5, 0)
+  local points = {
+    {x = 1, y = 3}, {x = -5, y = 0}, {x = 10, y = -2}
+  }
+  local result = fun.map(points, offset_x_5)
+  assert_table_equal(result[1], {x = 6, y = 3})
+end
+
 function test.compose()
   local prefix1 = function(a) return "_" .. a end
   local prefix2 = function(a) return "$" .. a end
