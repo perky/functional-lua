@@ -122,3 +122,40 @@ The examples above do not modify the original `points` table, they return a new 
 ```lua
 fun(points):for_each(function(p) p.x = p.x + 5 end)
 ```
+
+## Other functions
+
+### fun.compose
+Ever seen code like this `g(f(m(x(value))))`? It hard to read because to make sense of it you need to read it inside-out. Compose helps you with these function chains and can be rewritten like this:
+
+```lua
+composed_function = fun.compose(x, m, f, g)
+composed_function(value)
+```
+
+### fun.best
+Best is useful for picking the 'best' value out of list, you pass in a function to define whats best is.
+
+```lua
+highest_number = fun({45, 28, 33, 10, 5, 78}).best(function(a, b) return a > b end)
+```
+
+### fun.concat
+Concatenates tables. `{1,2,3}:concat{4,5,6} => {1,2,3,4,5,6}`.
+
+### fun.concat_all
+Concatenates a table of tables. `{{1,2}, {3,4}, {5,6}}:concat_all() => {1,2,3,4,5,6}`.
+
+### fun.every
+Returns true if every value in a list passes a predicate. Returns false for the first value to fail.
+
+```lua
+fun({1,2,3,4,5}).every(fun.lt(6)) => true
+```
+
+### fun.any
+Return false if every value in a list fails a predicate. Return true for the first value to pass.
+
+```lua
+fun({1,2,3,4,5}).any(fun.lt(2)) => true
+```
